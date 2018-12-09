@@ -61,5 +61,6 @@
 			<version>0.9.0-incubating</version>
 			<classifier>hadoop1</classifier>
 		</dependency>
+
 	</dependencies>
 </project>
