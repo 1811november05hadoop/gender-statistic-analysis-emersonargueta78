@@ -18,10 +18,6 @@ import org.apache.hadoop.mapreduce.Mapper;
  * ColumnValueMapper
  */
 public class PercentIncreaseMapper extends Mapper<LongWritable, Text, Text, Text> {
-    //Used to extract rows with words education and female
-    // final private static String searchEducationFemaleCodes = "(.*)Educational(.*).*(.*)completed(.*).*(.*)female(.*)";
-    // final private static String searchEducationCodes = "(.*)education(.*)";
-
 
     @Override
     protected void map(LongWritable key, Text value, Context context)
@@ -57,7 +53,9 @@ public class PercentIncreaseMapper extends Mapper<LongWritable, Text, Text, Text
         //Getting the last range of years of values 
         Map<String,Integer> dataColsYear = new GenderStatsCols().getDataCols();
         ArrayList<Double> dataValues = new ArrayList<>();
+
         for (int i = rangeOfYears[0]; i < rangeOfYears[1]; i++) {
+            //Skipping empty column data values
             if(
                 colValsList.get( dataColsYear.get(String.valueOf(i)) ).length() != 0
             ){
