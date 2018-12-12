@@ -1,7 +1,8 @@
 package com.revature.Drivers;
 
 import com.revature.GenderStatistics;
-import com.revature.map.CodeForFemaleEducation;
+import com.revature.Util.Regex;
+import com.revature.map.CodeForFemaleGraduation;
 import com.revature.map.ColumnValueMapper;
 import com.revature.reduce.IntersectReduce;
 
@@ -26,6 +27,15 @@ public class FemaleGraduates extends Configured implements Tool {
     public static int lowerYearRange;
     public static int upperYearRange;
     final private static Logger LOGGER =  Logger.getLogger(FemaleGraduates.class);
+    
+    final static private Regex regex = new Regex();
+        
+    static{
+            regex.setRegexes(
+                                "(.*)Educational(.*).*(.*)completed(.*).*(.*)female(.*)",
+                                "(.*)education(.*)"
+                            );
+    }
 
     @Override
     public int run(String[] args) throws Exception {
@@ -34,7 +44,7 @@ public class FemaleGraduates extends Configured implements Tool {
             System.out.printf("Usage: GenderStatistics <input1 dir> <input2 dir> <output1 dir>\n");
             System.exit(-1);
         }
-
+        
         lowerYearRange = Integer.valueOf(args[3]);
         upperYearRange = Integer.valueOf(args[4]);
 
@@ -54,7 +64,7 @@ public class FemaleGraduates extends Configured implements Tool {
 
         MultipleInputs.addInputPath(job, inputFile2, TextInputFormat.class, ColumnValueMapper.class);
 
-        MultipleInputs.addInputPath(job, inputFile1, TextInputFormat.class, CodeForFemaleEducation.class);
+        MultipleInputs.addInputPath(job, inputFile1, TextInputFormat.class, CodeForFemaleGraduation.class);
 
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(Text.class);
@@ -76,8 +86,8 @@ public class FemaleGraduates extends Configured implements Tool {
         TextOutputFormat.setOutputPath(job, outputDir);
 
         boolean success = job.waitForCompletion(true);
-        System.exit(success ? 0 : 1);
-        return 0;
+        //System.exit(success ? 0 : 1);
+        return success ? 0 : 1;
     }
 
 }
