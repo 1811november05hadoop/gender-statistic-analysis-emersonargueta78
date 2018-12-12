@@ -11,19 +11,33 @@ public class Main {
         switch(Integer.valueOf(args[0])){
             case 5:
                 LOGGER.info("Starting job 5");
-                // String[] commandFemaleGraduation = {};
-                // new GenderStatistics().run(commandFemaleGraduation);        
+                //String[] commandEmployementEducationRelationship = {};
+                // new GenderStatistics().run(commandEmployementEducationRelationship);        
             case 4:
                 LOGGER.info("Starting job 4");
-                // String[] commandFemaleEducation = {};
-                // new GenderStatistics().run(commandFemaleEducation);        
+                String[] commandFemaleEmployment = {
+                                            "3",
+                                            "data/Gender_StatsSeries.csv",
+                                            "data/Gender_StatsData.csv",
+                                            "outputGenderStats/BQ3",
+                                            args[1],
+                                            args[2]
+                };
+                new GenderStatistics().run(commandFemaleEmployment);        
             case 3:
                 LOGGER.info("Starting job 3");
-                // String[] commandMaleEmployment = {};
-                // new GenderStatistics().run(commandMaleEmployment);        
+                String[] commandMaleEmployment = {
+                                                "3",
+                                                "data/Gender_StatsSeries.csv",
+                                                "data/Gender_StatsData.csv",
+                                                "outputGenderStats/BQ3",
+                                                args[1],
+                                                args[2]
+                };
+                new GenderStatistics().run(commandMaleEmployment);        
             case 2:
                 LOGGER.info("Starting job 2");
-                String[] commandFemaleEmployment = {
+                String[] commandFemaleEducationIncrease = {
                                                     "2",
                                                     "data/Gender_StatsSeries.csv",
                                                     "data/Gender_StatsData.csv",
@@ -31,18 +45,18 @@ public class Main {
                                                     "",
                                                     ""
                                                    };
-                new GenderStatistics().run(commandFemaleEmployment);        
+                new GenderStatistics().run(commandFemaleEducationIncrease);        
             case 1:
-                LOGGER.info("Starting job 1");
-                String[] commandEmploymentEducationRelationship = {
-                                                                    "1",
-                                                                    "data/Gender_StatsSeries.csv",
-                                                                    "data/Gender_StatsData.csv",
-                                                                    "outputGenderStats/BQ1",
-                                                                    args[1],
-                                                                    args[2]
-                                                                  };
-                new GenderStatistics().run(commandEmploymentEducationRelationship);        
+                // LOGGER.info("Starting job 1");
+                // String[] commandFemaleGraduation = {
+                //                                                     "1",
+                //                                                     "data/Gender_StatsSeries.csv",
+                //                                                     "data/Gender_StatsData.csv",
+                //                                                     "outputGenderStats/BQ1",
+                //                                                     args[1],
+                //                                                     args[2]
+                //                                                   };
+                // new GenderStatistics().run(commandFemaleGraduation);        
                 break;
             
         }

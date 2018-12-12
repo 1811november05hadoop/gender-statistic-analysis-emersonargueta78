@@ -2,7 +2,7 @@ package com.revature.Drivers;
 
 import com.revature.GenderStatistics;
 import com.revature.Util.Regex;
-import com.revature.map.CodeForFemaleGraduation;
+import com.revature.map.CodeForBussinessQuestion;
 import com.revature.map.ColumnValueMapper;
 import com.revature.reduce.IntersectReduce;
 
@@ -64,7 +64,7 @@ public class FemaleGraduates extends Configured implements Tool {
 
         MultipleInputs.addInputPath(job, inputFile2, TextInputFormat.class, ColumnValueMapper.class);
 
-        MultipleInputs.addInputPath(job, inputFile1, TextInputFormat.class, CodeForFemaleGraduation.class);
+        MultipleInputs.addInputPath(job, inputFile1, TextInputFormat.class, CodeForBussinessQuestion.class);
 
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(Text.class);

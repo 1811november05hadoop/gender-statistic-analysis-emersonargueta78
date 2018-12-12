@@ -2,8 +2,8 @@ package com.revature.Drivers;
 
 import com.revature.GenderStatistics;
 import com.revature.Util.Regex;
-import com.revature.map.CodeForFemaleGraduation;
-import com.revature.map.PercentIncreaseMapper;
+import com.revature.map.AverageIncreaseFemaleEducation;
+import com.revature.map.CodeForBussinessQuestion;
 import com.revature.reduce.IntersectReduce;
 
 
@@ -64,8 +64,8 @@ public class FemaleEducation extends Configured implements Tool {
                 Path inputFile2 = new Path(args[1]);
                 Path outputDir = new Path(args[2]);
 
-                MultipleInputs.addInputPath(job, inputFile2, TextInputFormat.class, PercentIncreaseMapper.class);
-                MultipleInputs.addInputPath(job, inputFile1, TextInputFormat.class, CodeForFemaleGraduation.class);
+                MultipleInputs.addInputPath(job, inputFile2, TextInputFormat.class, AverageIncreaseFemaleEducation.class);
+                MultipleInputs.addInputPath(job, inputFile1, TextInputFormat.class, CodeForBussinessQuestion.class);
 
                 job.setMapOutputKeyClass(Text.class);
                 job.setMapOutputValueClass(Text.class);

@@ -1,7 +1,7 @@
 package com.revature.test;
 
 import com.revature.Util.Regex;
-import com.revature.map.CodeForFemaleGraduation;
+import com.revature.map.CodeForBussinessQuestion;
 import com.revature.reduce.IntersectReduce;
 
 import org.apache.hadoop.io.LongWritable;
@@ -32,7 +32,7 @@ public class MapTest {
         /*
          * Set up the mapper test harness.
          */
-        Mapper<LongWritable, Text, Text, Text> mapper = new CodeForFemaleGraduation();
+        Mapper<LongWritable, Text, Text, Text> mapper = new CodeForBussinessQuestion();
         mapDriver = new MapDriver<LongWritable, Text, Text, Text>();
         mapDriver.setMapper(mapper);
 

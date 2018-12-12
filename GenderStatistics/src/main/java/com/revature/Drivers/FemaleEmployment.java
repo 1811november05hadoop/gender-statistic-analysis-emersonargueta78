@@ -1,100 +1,96 @@
 package com.revature.Drivers;
 
+import com.revature.GenderStatistics;
+import com.revature.Util.Regex;
+import com.revature.map.CodeForBussinessQuestion;
+import com.revature.map.ColumnValueMapper;
+import com.revature.reduce.IntersectReduce;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.conf.Configured;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.MultipleInputs;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
+import org.apache.hadoop.util.Tool;
+import org.apache.log4j.Logger;
 
 /**
  * FemaleEmployment
  */
-public class FemaleEmployment {
+public class FemaleEmployment extends Configured implements Tool {
 
-    public static void main(String[] args) throws Exception {
+    final private static Logger LOGGER = Logger.getLogger(FemaleEducation.class);
+        public static int lowerYearRange;
+        public static int upperYearRange;
 
-		/*
-		 * The expected command-line arguments are the paths containing
-		 * input and output data. Terminate the job if the number of
-		 * command-line arguments is not exactly 2.
-		 */
-		if (args.length != 2) {
-			System.out.printf(
-					"Usage: GenderAnalysis <input dir> <output dir>\n");
-			System.exit(-1);
-		}
+        final static private Regex regex = new Regex();
+        
+        static{
+                regex.setRegexes(
+                        "(.*)Employment(.*).*(.*)population(.*).*(.*)female(.*)",
+                        "(.*)employment(.*)"
+                      );
+        }
 
-		/*
-		 * Instantiate a Job object for your job's configuration.  
-		 */
-		Job job = new Job();
+        @Override
+        public int run(String[] args) throws Exception {
 
-		/*
-		 * Specify the jar file that contains your driver, mapper, and reducer.
-		 * Hadoop will transfer this jar file to nodes in your cluster running
-		 * mapper and reducer tasks.
-		 */
-		job.setJarByClass(FemaleEmployment.class);
+                LOGGER.info("Starting Female Education");
+                if (args.length != 5) {
+                        System.out.printf("Usage: GenderStatistics <input1 dir> <input2 dir> <output1 dir>\n");
+                        System.exit(-1);
+                }
+                
 
-		/*
-		 * Specify an easily-decipherable name for the job.
-		 * This job name will appear in reports and logs.
-		 */
-		job.setJobName("Female employment less than 30%");
+                lowerYearRange = Integer.valueOf(args[3]);
+                upperYearRange = Integer.valueOf(args[4]);
 
-		/*
-		 * Specify the paths to the input and output data based on the
-		 * command-line arguments.
-		 */
-		FileInputFormat.setInputPaths(job, new Path(args[0]));
-		FileOutputFormat.setOutputPath(job, new Path(args[1]));
+                Configuration config = new Configuration();
+                Job job = new Job();
+                FileSystem fs = FileSystem.get(config);
 
-		
-		/*
-		 * Specify the mapper and reducer classes.
-		 */
-		
-		job.setMapperClass(null);
-		job.setCombinerClass(null);
-		job.setReducerClass(null);
+                job.setJarByClass(GenderStatistics.class);
+                job.setJobName("Female Gender Statistics");
 
-		//
+                /**
+                 * Using multiple inputs with a mapper for each
+                 */
+                Path inputFile1 = new Path(args[0]);
+                Path inputFile2 = new Path(args[1]);
+                Path outputDir = new Path(args[2]);
 
-		/*
-		 * For the word count application, the input file and output 
-		 * files are in text format - the default format.
-		 * 
-		 * In text format files, each record is a line delineated by a 
-		 * by a line terminator.
-		 * 
-		 * When you use other input formats, you must call the 
-		 * SetInputFormatClass method. When you use other 
-		 * output formats, you must call the setOutputFormatClass method.
-		 */
+                MultipleInputs.addInputPath(job, inputFile2, TextInputFormat.class, ColumnValueMapper.class);
+                MultipleInputs.addInputPath(job, inputFile1, TextInputFormat.class, CodeForBussinessQuestion.class);
 
-		/*
-		 * For the word count application, the mapper's output keys and
-		 * values have the same data types as the reducer's output keys 
-		 * and values: Text and IntWritable.
-		 * 
-		 * When they are not the same data types, you must call the 
-		 * setMapOutputKeyClass and setMapOutputValueClass 
-		 * methods.
-		 */
+                job.setMapOutputKeyClass(Text.class);
+                job.setMapOutputValueClass(Text.class);
 
-		/*
-		 * Specify the job's output key and value classes.
-		 */
-		job.setOutputKeyClass(Text.class);
-		job.setOutputValueClass(IntWritable.class);
+                job.setOutputKeyClass(Text.class);
+                job.setOutputValueClass(Text.class);
 
-		/*
-		 * Start the MapReduce job and wait for it to finish.
-		 * If it finishes successfully, return 0. If not, return 1.
-		 */
-		boolean success = job.waitForCompletion(true);
-		System.exit(success ? 0 : 1);
-	}
+                job.setReducerClass(IntersectReduce.class);
+
+                job.setOutputFormatClass(TextOutputFormat.class);
+
+                /*
+                 * delete if exist
+                 */
+                if (fs.exists(outputDir)) {
+                        fs.delete(outputDir, true);
+                }
+
+                TextOutputFormat.setOutputPath(job, outputDir);
+
+                boolean success = job.waitForCompletion(true);
+                //System.exit(success ? 0 : 1);
+                return success ? 0 : 1;
+        }
     
 }
