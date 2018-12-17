@@ -1,0 +1,30 @@
+{
+    "run": {
+        "default": "",
+        "items": [
+            {
+                "name": "GenderStatistics",
+                "projectName": "GenderStatistics",
+                "workingDirectory": "/home/emerson/Repositories/gender-statistic-analysis-emersonargueta78/GenderStatistics",
+                "args": [],
+                "vmargs": [],
+                "env": {},
+                "preLaunchTask": ""
+            }
+        ]
+    },
+    "debug": {
+        "default": "",
+        "items": [
+            {
+                "name": "GenderStatistics",
+                "projectName": "GenderStatistics",
+                "workingDirectory": "/home/emerson/Repositories/gender-statistic-analysis-emersonargueta78/GenderStatistics",
+                "args": [],
+                "vmargs": [],
+                "env": {},
+                "preLaunchTask": ""
+            }
+        ]
+    }
+}
