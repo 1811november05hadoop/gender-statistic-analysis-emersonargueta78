@@ -19,7 +19,6 @@ public class Main {
                     "2016"
                 };
                 new GenderStatistics().run(commandMaleEducation);        
-                break;
             case 4:
                 LOGGER.info("Starting job 4");
                 String[] commandFemaleEmployment = {
