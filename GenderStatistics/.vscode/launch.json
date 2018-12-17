@@ -10,7 +10,7 @@
             "request": "launch",
             "mainClass": "com.revature.Main",
             "projectName": "GenderStatistics",
-            "args": "1"
+            "args": "5"
         }
     ]
 }
