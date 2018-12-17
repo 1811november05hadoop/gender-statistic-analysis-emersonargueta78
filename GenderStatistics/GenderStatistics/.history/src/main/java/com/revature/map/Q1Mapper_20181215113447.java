@@ -1,0 +1,86 @@
+package com.revature.map;
+
+import java.io.IOException;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import com.revature.util.Cleaning;
+import com.revature.util.GenderStatsCols;
+import com.revature.util.Globals;
+
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.MapWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
+
+/**
+ * Q1Mapper
+ */
+public class Q1Mapper extends Mapper<LongWritable,Text,MapWritable,MapWritable> implements Globals{
+    
+    private static String yearLowerRange = "";
+    private static String yearUpperRange = "";
+    private static String[] regexes;
+    
+
+    @Override
+    protected void map(LongWritable key, Text value, Context context)
+    throws IOException, InterruptedException {
+        Cleaning cleaning = new Cleaning();
+        String line = value.toString();
+        
+        Entry<StringBuilder,ArrayList<String>> entry = cleaning.splitAndClean(line);
+        StringBuilder stringRow = entry.getKey();
+        List<String> colVals = entry.getValue();
+
+        
+        StringBuilder bq1DataVals = cleaning
+        .getYearlyColumnVals(colVals, new AbstractMap.SimpleImmutableEntry<>(yearLowerRange, yearUpperRange));
+        String indicatorCode = colVals.get(GenderStatsCols.Data.INDICATOR_CODE);
+        String indicatorName = colVals.get(GenderStatsCols.Data.INDICATOR_NAME);
+        String country = colVals.get(GenderStatsCols.Data.COUNTRY);
+
+        MapWritable mapKey = new MapWritable();
+        MapWritable mapVal = new MapWritable();
+        //if(indicatorName.matches(searchFor))
+        mapKey.put(new Text(indicatorCode), new Text(country));
+        mapVal.put(new Text(bq1DataVals.toString()),new IntWritable(1));
+
+        context.write(mapKey,mapVal);
+    }
+
+    @Override
+    public void setRegex(String regex) {
+        
+    }
+
+    @Override
+    public void setRegexes(String... regexes) {
+
+    }
+
+    @Override
+    public String getRegex() {
+        return null;
+    }
+
+    @Override
+    public String[] getRegexes() {
+        return null;
+    }
+
+    @Override
+    public void setYearlyRanges(String... ranges) {
+
+    }
+
+    @Override
+    public String[] getYearlyRanges() {
+        return null;
+    }
+    
+}

@@ -2,21 +2,18 @@ package com.revature.Drivers;
 
 import com.revature.GenderStatistics;
 import com.revature.Util.Regex;
+import com.revature.map.AverageIncreaseFemaleEducation;
 import com.revature.map.CodeForBussinessQuestion;
-import com.revature.map.ColumnValueMapper;
-import com.revature.reduce.IntersectReduce;
+import com.revature.reduce.Reduce;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.MultipleInputs;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.log4j.Logger;
@@ -66,7 +63,7 @@ public class FemaleEmployment extends Configured implements Tool {
                 Path inputFile2 = new Path(args[1]);
                 Path outputDir = new Path(args[2]);
 
-                MultipleInputs.addInputPath(job, inputFile2, TextInputFormat.class, ColumnValueMapper.class);
+                MultipleInputs.addInputPath(job, inputFile2, TextInputFormat.class, AverageIncreaseFemaleEducation.class);
                 MultipleInputs.addInputPath(job, inputFile1, TextInputFormat.class, CodeForBussinessQuestion.class);
 
                 job.setMapOutputKeyClass(Text.class);
@@ -75,7 +72,7 @@ public class FemaleEmployment extends Configured implements Tool {
                 job.setOutputKeyClass(Text.class);
                 job.setOutputValueClass(Text.class);
 
-                job.setReducerClass(IntersectReduce.class);
+                job.setReducerClass(Reduce.class);
 
                 job.setOutputFormatClass(TextOutputFormat.class);
 
